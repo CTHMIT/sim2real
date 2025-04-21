@@ -9,7 +9,7 @@ repos:
         description: Remove trailing whitespace from files.
       - id: end-of-file-fixer
         description: Ensure all files end with a newline.
-        exclude: migrations/
+        exclude: (^migrations/|^\.pdm-python$)
       - id: check-yaml
         description: Validate YAML files, allowing multiple YAML documents.
         args: [--allow-multiple-documents]
