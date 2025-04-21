@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:01b175428bfc1d9d65b44049b3e55654feba3ddf9af64c8df23332fcf2bae4dc"
+content_hash = "sha256:bc09cc8e49311c395a36a2acbcf94ac6f2f197d1e1b8369ec61d04c26511e99f"
 
 [[metadata.targets]]
 requires_python = "==3.10.*"
@@ -286,20 +286,6 @@ files = [
     {file = "PyYAML-6.0.2-cp310-cp310-win32.whl", hash = "sha256:2e99c6826ffa974fe6e27cdb5ed0021786b03fc98e5ee3c5bfe1fd5015f42b99"},
     {file = "PyYAML-6.0.2-cp310-cp310-win_amd64.whl", hash = "sha256:a4d3091415f010369ae4ed1fc6b79def9416358877534caf6a0fdd2146c87a3e"},
     {file = "pyyaml-6.0.2.tar.gz", hash = "sha256:d584d9ec91ad65861cc08d42e834324ef890a082e591037abe114850ff7bbc3e"},
-]
-
-[[package]]
-name = "sim2real"
-version = "0.1.0"
-requires_python = "==3.10.*"
-path = "./."
-summary = "Default template for PDM package"
-groups = ["default"]
-dependencies = [
-    "asyncio>=3.4.3",
-    "mavsdk>=3.0.1",
-    "pydantic>=2.11.3",
-    "uvloop>=0.21.0",
 ]
 
 [[package]]

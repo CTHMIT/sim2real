@@ -1,20 +1,14 @@
-# Build & Install files
+# Build / Install / Logs
 build/
 install/
+dist/
 log/
 logs/
 flight_logs/
-.venv/
-.ruff_cache/
-.mypy_cache/
-
-# PX4 generated
-src/backup/
-src/px4_msgs/
-src/px4_ros_com/
 src/.logs/
-
-.pdm-python
+src/backup/
+*.log
+.logs/
 
 # Python
 __pycache__/
@@ -22,9 +16,7 @@ __pycache__/
 *$py.class
 *.so
 .Python
-build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -34,38 +26,41 @@ parts/
 sdist/
 var/
 wheels/
+*.egg
 *.egg-info/
 .installed.cfg
-*.egg
 *.pt
-px4_msgs/
-px4_ros_com/
-px4_ros/
-px4_ros2/
-.logs/
-src/.logs/
-# PDM
-.pdm.toml
-__pypackages__/
 
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# ROS2
-install/
-log/
-
-# Editor files
-.vscode/
-.idea/
-
-# 其他
-.env
-.venv
+# PDM / Virtualenv
+.venv/
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+.pdm.toml
+__pypackages__/
+
+# Type Checking / Linting
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# PX4 ROS2 Generated
+px4_msgs/
+px4_ros_com/
+px4_ros/
+src/px4_msgs/
+src/px4_ros_com/
+
+#  ROS 2 / Colcon
+install/
+log/
+
+# Environment
+.env
+
+# Editor / IDE
+.vscode/
+.idea/
