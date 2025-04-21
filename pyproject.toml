@@ -1,0 +1,15 @@
+[project]
+name = "sim2real"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "CTHMIT", email = "chuntsehsu@gmail.com"},
+]
+dependencies = ["mavsdk>=3.0.1", "asyncio>=3.4.3", "uvloop>=0.21.0", "pydantic>=2.11.3"]
+requires-python = "==3.10.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false

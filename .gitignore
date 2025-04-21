@@ -1,0 +1,70 @@
+# Build & Install files
+build/
+install/
+log/
+logs/
+flight_logs/
+.venv/
+.ruff_cache/
+.mypy_cache/
+
+# PX4 generated
+src/backup/
+src/px4_msgs/
+src/px4_ros_com/
+src/.logs/
+
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.pt
+px4_msgs/
+px4_ros_com/
+px4_ros/
+px4_ros2/
+.logs/
+src/.logs/
+# PDM
+.pdm.toml
+__pypackages__/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ROS2
+install/
+log/
+
+# Editor files
+.vscode/
+.idea/
+
+# 其他
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/

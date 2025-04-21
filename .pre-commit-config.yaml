@@ -1,0 +1,59 @@
+default_stages:
+  - pre-commit
+  - pre-push
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        description: Remove trailing whitespace from files.
+      - id: end-of-file-fixer
+        description: Ensure all files end with a newline.
+        exclude: migrations/
+      - id: check-yaml
+        description: Validate YAML files, allowing multiple YAML documents.
+        args: [--allow-multiple-documents]
+      - id: check-json
+        description: Ensure JSON files are well-formatted.
+      - id: fix-encoding-pragma
+        description: Remove unnecessary encoding pragmas in Python files.
+        args: [--remove]
+      - id: forbid-new-submodules
+        description: Prevent adding new submodules to the repository.
+      - id: mixed-line-ending
+        description: Ensure all files use UNIX-style 'lf' line endings.
+        args: [--fix=lf]
+      - id: check-added-large-files
+        description: Prevent large files (over 700KB) from being committed.
+        args: [--maxkb=700]
+      - id: no-commit-to-branch
+        description: Prevent direct commits to the 'staging' branch.
+        args: [--branch, staging]
+  - repo: https://github.com/ambv/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        description: Format Python code using Black.
+        language_version: python3.11
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        description: Perform type checking using mypy with custom dependencies.
+        args:
+          - --no-strict-optional
+          - --ignore-missing-imports
+        additional_dependencies:
+          - types-aiofiles
+          - types-PyYAML
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.8.3
+    hooks:
+      - id: ruff
+        description: Run Ruff linter and apply automatic fixes for Python code.
+        args: [--fix]
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+      - id: python-check-blanket-noqa
+        description: Check for blanket noqa usage in Python code.
