@@ -1,7 +1,10 @@
+import sys
+from pathlib import Path
 import pytest
 import asyncio
 from unittest.mock import MagicMock, patch, AsyncMock
-from monitor_run import (
+
+from src.monitor_run import (
     DroneConfig,
     ControlState,
     connect_drone,
@@ -11,6 +14,10 @@ from monitor_run import (
     check_gimbal_devices,
     DroneControlGUI,
 )
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.append(str(PROJECT_ROOT))
 
 
 class TestDroneConfig:
@@ -141,7 +148,7 @@ class TestDroneConnect:
 
         mock_drone.core.connection_state = mock_connection_state
 
-        with patch("monitor_run.System", return_value=mock_drone):
+        with patch("src.monitor_run.System", return_value=mock_drone):
             config = DroneConfig()
             result = await connect_drone(config)
 
@@ -158,7 +165,7 @@ class TestDroneConnect:
 
         mock_drone.core.connection_state = mock_connection_state
 
-        with patch("monitor_run.System", return_value=mock_drone):
+        with patch("src.monitor_run.System", return_value=mock_drone):
             config = DroneConfig()
             result = await connect_drone(config)
 
