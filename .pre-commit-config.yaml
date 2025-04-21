@@ -62,6 +62,6 @@ repos:
     hooks:
       - id: pytest
         name: pytest
-        entry: pdm run pytest
+        entry: pdm run pytest tests/
         language: system
         types: [python]
