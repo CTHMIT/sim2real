@@ -48,7 +48,7 @@ pdm run python monitor_run.py
 ```
 ✅ 4. Live Training with AI
 ```bash
-./run.sh --train-live   # Collect and Training(to be continued...)
+./run.sh --train-live   # Collect and Training (to be continued...)
 ```
 Or other modes:
 ```bash

@@ -34,7 +34,7 @@ repos:
     hooks:
       - id: black
         description: Format Python code using Black.
-        language_version: python3.11
+        language_version: python3.10
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.13.0
     hooks:
@@ -57,3 +57,11 @@ repos:
     hooks:
       - id: python-check-blanket-noqa
         description: Check for blanket noqa usage in Python code.
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: pdm run pytest
+        language: system
+        types: [python]
