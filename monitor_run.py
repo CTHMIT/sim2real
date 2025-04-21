@@ -67,9 +67,9 @@ class ControlState(BaseModel):
 async def connect_drone(config: DroneConfig) -> System | None:
     drone = System()
     LOGGER.info(f"Connecting to drone at {config.system_address}...")
-    await drone.connect(system_address=config.system_address)
-
     try:
+        await drone.connect(system_address=config.system_address)
+
         async for state in drone.core.connection_state():
             if state.is_connected:
                 LOGGER.info("Drone connected!")
@@ -78,6 +78,9 @@ async def connect_drone(config: DroneConfig) -> System | None:
         return None
     except asyncio.TimeoutError:
         LOGGER.info(f"Connection timed out after {config.connection_timeout} seconds.")
+        return None
+    except Exception as e:
+        LOGGER.info(f"Connection error: {e}")
         return None
 
 

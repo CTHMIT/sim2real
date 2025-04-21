@@ -11,5 +11,15 @@ readme = "README.md"
 license = {text = "MIT"}
 
 
+
 [tool.pdm]
 distribution = false
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "pytest",
+    "PyYAML>=6.0.2",
+    "lark>=1.2.2",
+    "numpy>=2.2.5",
+    "pytest-asyncio>=0.26.0",
+]
