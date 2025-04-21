@@ -14,6 +14,7 @@ src/px4_msgs/
 src/px4_ros_com/
 src/.logs/
 
+.pdm-python
 
 # Python
 __pycache__/
