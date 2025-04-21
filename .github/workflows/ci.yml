@@ -41,17 +41,20 @@ jobs:
       - name: Run pre-commit
         run: |
           pip install pre-commit
-          pdm run pre-commit run --all-files
+          pre-commit run --all-files
 
   bump-version:
     needs: test
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -137,6 +140,8 @@ jobs:
           git commit -m "ci: auto bump version to ${{ env.NEW_VERSION }} [skip ci]"
           git tag v${{ env.NEW_VERSION }}
 
+          # 使用 GITHUB_TOKEN 进行认证的方式推送
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git push origin main
           git push origin v${{ env.NEW_VERSION }}
 
