@@ -57,7 +57,6 @@ repos:
     hooks:
       - id: python-check-blanket-noqa
         description: Check for blanket noqa usage in Python code.
-
   - repo: local
     hooks:
       - id: pytest
