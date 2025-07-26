@@ -69,7 +69,7 @@ class TestControlStateManipulation:
         state = ControlState()
         gui = DroneControlGUI(MagicMock(), config, state)
 
-        gui.pressed_keys.add("w")
+        state.pressed_keys.add("w")
         gui.process_keys()
 
         assert state.velocity_forward > 0
@@ -81,9 +81,9 @@ class TestControlStateManipulation:
         state = ControlState()
         gui = DroneControlGUI(MagicMock(), config, state)
 
-        gui.pressed_keys.add("w")  # Forward
-        gui.pressed_keys.add("d")  # Right
-        gui.pressed_keys.add("q")  # Yaw left
+        state.pressed_keys.add("w")  # Forward
+        state.pressed_keys.add("d")  # Right
+        state.pressed_keys.add("q")  # Yaw left
         gui.process_keys()
 
         assert state.velocity_forward > 0
@@ -235,22 +235,21 @@ class TestTakeoffLand:
         assert result is True
 
     async def test_check_gimbal_devices(self, monkeypatch):
-        async def mock_gimbal_list():
-            mock_gimbal = MagicMock()
-            mock_gimbal.gimbal_id = 1
-            mock_gimbal.model_name = "Test Gimbal"
-            mock_gimbal.vendor_name = "Test Vendor"
 
-            mock_gimbal_list = MagicMock()
-            mock_gimbal_list.gimbals = [mock_gimbal]
+        mock_gimbal = MagicMock()
+        mock_gimbal.gimbal_id = 1
+        mock_gimbal.model_name = "Test Gimbal"
+        mock_gimbal.vendor_name = "Test Vendor"
 
-            yield mock_gimbal_list
+        mock_gimbal_list = MagicMock()
+        mock_gimbal_list.gimbals = [mock_gimbal]
 
         mock_drone = AsyncMock()
         config = DroneConfig()
+        state = ControlState()
 
-        mock_drone.gimbal.gimbal_list = mock_gimbal_list
+        mock_drone.gimbal.gimbal_list = AsyncMock(return_value=mock_gimbal_list)
 
-        await check_gimbal_devices(mock_drone, config)
+        await check_gimbal_devices(mock_drone, config, state)
 
         assert config.target_gimbal_id == 1

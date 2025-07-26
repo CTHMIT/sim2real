@@ -9,7 +9,21 @@ dependencies = [
     "mavsdk>=3.0.1",
     "asyncio>=3.4.3",
     "uvloop>=0.21.0",
-    "pydantic>=2.11.3"
+    "pydantic>=2.11.3",
+    "pynput>=1.8.1",
+    "torch>=2.7.0",
+    "cosysairsim>=3.3.0",
+    "pillow>=11.2.1",
+    "pyopengl>=3.1.9",
+    "glfw>=2.9.0",
+    "pycuda>=2025.1",
+    "opencv-contrib-python==4.7.0.72",
+    "numpy<2",
+    "pymavlink>=2.4.47",
+    "pygame>=2.6.1",
+    "tkintermapview>=1.29",
+    "requests>=2.32.4",
+    "pyserial>=3.5",
 ]
 
 requires-python = "==3.10.*"
@@ -24,7 +38,7 @@ dev = [
     "pytest",
     "PyYAML>=6.0.2",
     "lark>=1.2.2",
-    "numpy>=2.2.5",
+    "numpy<2",
     "pytest-asyncio>=0.26.0",
 ]
 

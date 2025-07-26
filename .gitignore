@@ -9,6 +9,7 @@ src/.logs/
 src/backup/
 *.log
 .logs/
+as_gimbal.py
 
 # Python
 __pycache__/

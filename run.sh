@@ -132,6 +132,9 @@ echo -e "\n${CYAN} NOTE:${NC} Make sure to install tmux, htop, nc, image_tools. 
 setup_environment() {
     echo -e "${BLUE}=== Initialize the simulation environment ===${NC}"
 
+    command -v tmux >/dev/null 2>&1 || { echo -e "${RED}Error: tmux not found!${NC}"; return 1; }
+    echo -e "${BLUE}Using tmux version: $(tmux -V)${NC}"
+
     if tmux has-session -t "$SESSION" 2>/dev/null; then
         echo -e "${YELLOW}An existing tmux session [$SESSION] will be closed...${NC}"
         tmux kill-session -t "$SESSION"
@@ -158,11 +161,17 @@ setup_environment() {
     XRCE_PID=$(pgrep -f "MicroXRCEAgent.*${XRCE_PORT:-8888}" || echo "")
     [ -n "$XRCE_PID" ] && ALL_PIDS+=($XRCE_PID)
 
-    tmux new-window -t "$SESSION" -n "QGC" "bash -c '~/QGroundControl.AppImage; exec bash'" &
-    PIDS+=($!)
-    sleep 2
-    QGC_PID=$(pgrep -f "QGC" || echo "")
-     [ -n "$QGC_PID" ] && ALL_PIDS+=($QGC_PID)
+
+    echo -e "${BLUE}Restarting ROS 2 daemon...${NC}"
+    ros2 daemon stop
+    sleep 1
+    ros2 daemon start
+
+    # tmux new-window -t "$SESSION" -n "QGC" "bash -c '~/QGroundControl.AppImage; exec bash'" &
+    # PIDS+=($!)
+    # sleep 2
+    # QGC_PID=$(pgrep -f "QGC" || echo "")
+    #  [ -n "$QGC_PID" ] && ALL_PIDS+=($QGC_PID)
 
     tmux new-window -t "$SESSION" -n "PX4" "bash -c '\
 
@@ -193,10 +202,11 @@ setup_environment() {
         ALL_PIDS+=($pid)
     done
 
-    # echo -e "${BLUE}Send mavlink start command...${NC}"
-    # tmux send-keys -t "$SESSION:PX4" "mavlink stop-all" C-m
-    # sleep 1
-    # tmux send-keys -t "$SESSION:PX4" "mavlink start -p -o 14550" C-m
+    echo -e "${BLUE}Send mavlink start command...${NC}"
+    tmux send-keys -t "$SESSION:PX4" "mavlink stop-all" C-m
+    sleep 1
+    tmux send-keys -t "$SESSION:PX4" "mavlink start -p -o 14550" C-m
+    tmux send-keys -t "$SESSION:PX4" "mavlink start -p -o 18570" C-m
 
     echo -e "${BLUE}Waiting for PX4 Gazebo to start...${NC}"
     TIMEOUT=${SERVICE_TIMEOUT:-60}
@@ -236,18 +246,31 @@ setup_environment() {
     ROSBRIDGE_PID=$(pgrep -f "rosbridge.*${ROSBRIDGE_PORT:-9090}" || echo "")
     [ -n "$ROSBRIDGE_PID" ] && ALL_PIDS+=($ROSBRIDGE_PID)
 
-    BRIDGE_TOPIC="/world/${PX4_GZ_WORLD:-baylands}/model/${PX4_GZ_MODEL:-x500_gimbal}_${PX4_MODEL_INSTANCE:0}/link/${CAMERA_LINK:-camera_link}/sensor/${CAMERA_TOPIC:-camera}/image"
-    tmux new-window -t "$SESSION" -n "Bridge" "bash -c 'source /opt/ros/humble/setup.bash; ros2 run ros_gz_bridge parameter_bridge $BRIDGE_TOPIC@sensor_msgs/msg/Image@gz.msgs.Image; exec bash'" &
+    BRIDGE_TOPIC1="/world/${PX4_GZ_WORLD:-baylands}/model/${PX4_GZ_MODEL:-x500_gimbal}_${PX4_MODEL_INSTANCE:0}/link/${CAMERA_LINK:-camera_link}/sensor/left_${CAMERA_TOPIC:-camera}/image"
+    BRIDGE_TOPIC2="/world/${PX4_GZ_WORLD:-baylands}/model/${PX4_GZ_MODEL:-x500_gimbal}_${PX4_MODEL_INSTANCE:0}/link/${CAMERA_LINK:-camera_link}/sensor/right_${CAMERA_TOPIC:-camera}/image"
+    tmux new-window -t "$SESSION" -n "Bridge1" "bash -c 'source /opt/ros/humble/setup.bash; ros2 run ros_gz_bridge parameter_bridge $BRIDGE_TOPIC1@sensor_msgs/msg/Image@gz.msgs.Image; exec bash'" &
     PIDS+=($!)
     sleep 2
-    BRIDGE_PID=$(pgrep -f "ros_gz_bridge.*parameter_bridge" || echo "")
-    [ -n "$BRIDGE_PID" ] && ALL_PIDS+=($BRIDGE_PID)
+    BRIDGE_PID1=$(pgrep -f "ros_gz_bridge.*parameter_bridge1" || echo "")
+    [ -n "$BRIDGE_PID1" ] && ALL_PIDS+=($BRIDGE_PID1)
+    tmux new-window -t "$SESSION" -n "Bridge2" "bash -c 'source /opt/ros/humble/setup.bash; ros2 run ros_gz_bridge parameter_bridge $BRIDGE_TOPIC2@sensor_msgs/msg/Image@gz.msgs.Image; exec bash'" &
+    PIDS+=($!)
+    sleep 2
+    BRIDGE_PID2=$(pgrep -f "ros_gz_bridge.*parameter_bridge2" || echo "")
+    [ -n "$BRIDGE_PID2" ] && ALL_PIDS+=($BRIDGE_PID2)
 
-    tmux new-window -t "$SESSION" -n "Image" "bash -c 'source /opt/ros/humble/setup.bash; ros2 run image_tools showimage --ros-args -r image:=$BRIDGE_TOPIC; exec bash'" &
+    tmux new-window -t "$SESSION" -n "Image1" "bash -c 'source /opt/ros/humble/setup.bash; ros2 run image_tools showimage --ros-args -r image:=$BRIDGE_TOPIC1; exec bash'" &
     PIDS+=($!)
     sleep 2
-    IMAGE_PID=$(pgrep -f "image_tools.*showimage" || echo "")
-    [ -n "$IMAGE_PID" ] && ALL_PIDS+=($IMAGE_PID)
+    IMAGE_PID1=$(pgrep -f "image_tools.*showimage1" || echo "")
+    [ -n "$IMAGE_PID1" ] && ALL_PIDS+=($IMAGE_PID1)
+
+    tmux new-window -t "$SESSION" -n "Image2" "bash -c 'source /opt/ros/humble/setup.bash; ros2 run image_tools showimage --ros-args -r image:=$BRIDGE_TOPIC2; exec bash'" &
+    PIDS+=($!)
+    sleep 2
+    IMAGE_PID2=$(pgrep -f "image_tools.*showimage2" || echo "")
+    [ -n "$IMAGE_PID2" ] && ALL_PIDS+=($IMAGE_PID2)
+
 
     echo -e "${GREEN}Environment setup is complete and the simulator is ready${NC}"
 }
